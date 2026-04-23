@@ -1,24 +1,10 @@
-spring:
+# 生产环境配置（容器内运行时生效）
+# 这些变量会被 application.yaml 的 ${user.datasource.*} 引用
+# 支持通过环境变量覆盖，方便在 docker-compose 里注入
+user:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${MYSQL_HOST:mysql}:${MYSQL_PORT:3306}/${MYSQL_DB:tag}?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
-    username: ${MYSQL_USER:root}
-    password: ${MYSQL_PASSWORD}
-    hikari:
-      connection-timeout: 10000
-      maximum-pool-size: 10
-
-logging:
-  level:
-    root: info
-    com.happycat.yupaobackendmaster: info
-  file:
-    name: /app/logs/yupao-backend-master.log
-  logback:
-    rollingpolicy:
-      max-file-size: 50MB
-      max-history: 30
-      total-size-cap: 1GB
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
-    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+    # 注意：host 是 docker-compose 中 mysql 服务的名字
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://mysql:3306/happycat?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:123456}
